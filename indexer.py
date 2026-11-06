@@ -13,11 +13,31 @@ import struct
 import sys
 import os
 import string
+import gzip
 
 def tokenize(text):
     text = text.lower()
     translator = str.maketrans('', '', string.punctuation + '।॥')
     return text.translate(translator).split()
+
+def open_dataset_file(filepath):
+    """
+    Transparently opens either uncompressed (.jsonl) or gzipped (.jsonl.gz) files.
+    If the requested file does not exist, automatically checks for its .gz counterpart.
+    """
+    actual_path = filepath
+    if not os.path.exists(actual_path):
+        if os.path.exists(actual_path + ".gz"):
+            actual_path = actual_path + ".gz"
+        elif actual_path.endswith(".gz") and os.path.exists(actual_path[:-3]):
+            actual_path = actual_path[:-3]
+        else:
+            raise FileNotFoundError(f"Dataset file '{filepath}' (or '{filepath}.gz') not found.")
+            
+    print(f"Reading dataset from: {actual_path}")
+    if actual_path.endswith(".gz"):
+        return gzip.open(actual_path, "rt", encoding="utf-8")
+    return open(actual_path, "r", encoding="utf-8")
 
 def build_binary_index(input_filepath, bin_filepath, lex_filepath):
     print("Building in-memory inverted index...")
@@ -26,7 +46,7 @@ def build_binary_index(input_filepath, bin_filepath, lex_filepath):
     index = {}
     
     docs_processed = 0
-    with open(input_filepath, "r", encoding="utf-8") as f:
+    with open_dataset_file(input_filepath) as f:
         for line in f:
             doc = json.loads(line)
             # Ensure doc_id is an integer so we can pack it as 4 bytes
@@ -81,8 +101,8 @@ if __name__ == "__main__":
     bin_file = "postings.bin" if len(sys.argv) <= 2 else sys.argv[2]
     lex_file = "lexicon.json" if len(sys.argv) <= 3 else sys.argv[3]
     
-    if not os.path.exists(input_file):
-        print(f"Error: {input_file} not found.")
+    if not os.path.exists(input_file) and not os.path.exists(input_file + ".gz"):
+        print(f"Error: Neither '{input_file}' nor '{input_file}.gz' found.")
         sys.exit(1)
         
     build_binary_index(input_file, bin_file, lex_file)

@@ -56,10 +56,27 @@ Official Wikimedia dump containing all encyclopedic Hindi Wikipedia articles wri
 - Python 3.8+
 - Flask (`pip install flask`)
 
-> **Note on Dataset Reproducibility:**  
-> The file `docs.jsonl` included in this repository contains the fixed 10,000 Hindi Wikipedia articles used for this assignment. Building the index from `docs.jsonl` ensures 100% exact match with the results in `output.txt`.
+---
 
-### Step 1: Build the Index from `docs.jsonl`
+### Step 1: Prepare the Dataset (`docs.jsonl.gz`)
+The benchmark dataset of 10,000 Hindi Wikipedia articles is included in this repository as **`docs.jsonl.gz`** (compressed to 23 MB to comply with Git storage limits).
+
+To decompress it into `docs.jsonl`:
+```bash
+# Decompress and keep the original .gz archive
+gunzip -k docs.jsonl.gz
+```
+*(Alternatively, you can decompress via Python: `python3 -c "import gzip, shutil; shutil.copyfileobj(gzip.open('docs.jsonl.gz'), open('docs.jsonl', 'wb'))"`)*
+
+> **Note:** `indexer.py` also features built-in transparent decompression! If you run `python3 indexer.py` without unzipping, it will automatically detect and stream from `docs.jsonl.gz` directly.
+
+
+**Note on Dataset Reproducibility:**  
+> The file `docs.jsonl` included in this repository contains the fixed 10,000 Hindi Wikipedia latest articles I took at time of creating the assignment. If you build an index direclty from latest 10,000 articles would differ from my verseion, so building the index from `docs.jsonl` ensures 100% exact match with the results in `output.txt`.
+
+---
+
+### Step 2: Build the Index
 To build `postings.bin` (secondary storage) and `lexicon.json` (vocabulary) from this dataset:
 ```bash
 python3 indexer.py docs.jsonl postings.bin lexicon.json
