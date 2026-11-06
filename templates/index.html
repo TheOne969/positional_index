@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wikipedia Positional Search</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; color: #333; }
+        .search-box { margin-bottom: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #fdfdfd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .controls { display: flex; gap: 10px; margin-bottom: 15px; }
+        input, select, button { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+        input[type="text"] { flex-grow: 1; }
+        button { background-color: #0066cc; color: white; border: none; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        button:hover { background-color: #0052a3; }
+        #status { font-weight: bold; margin-bottom: 15px; color: #555; }
+        .result-item { background: #f4f4f4; padding: 12px; margin-bottom: 8px; border-radius: 4px; border-left: 4px solid #0066cc; }
+        .positions-truncated { color: #555; font-size: 0.9em; margin-top: 5px; }
+        .positions-full { display: none; color: #555; font-size: 0.9em; margin-top: 5px; word-wrap: break-word; }
+        .expand-btn { color: #0066cc; cursor: pointer; text-decoration: underline; margin-left: 5px; font-size: 0.9em; border: none; background: none; padding: 0; }
+    
+        .kb-key { padding: 8px 12px; margin: 3px; font-size: 18px; cursor: pointer; background: white; border: 1px solid #ccc; border-radius: 4px; color: #333;}
+        .kb-key:hover { background: #e0e0e0; }
+
+    </style>
+</head>
+<body>
+    <h1>Hindi Wikipedia Search</h1>
+    
+    <div class="search-box">
+        <div class="controls">
+            
+            
+            <select id="search-type" onchange="toggleDistance()">
+                <option value="phrase">Phrase Search</option>
+                <option value="proximity">Proximity Search</option>
+            </select>
+            
+            <input type="number" id="distance" placeholder="Distance (e.g. 2)" style="display: none; width: 150px;" min="0">
+        </div>
+        
+        <div class="controls" style="margin-bottom: 0;">
+            <input type="text" id="query" placeholder="Enter search terms..." onkeypress="if(event.key === 'Enter') performSearch()">
+            <button onclick="performSearch()">Search</button>
+        </div>
+    </div>
+    
+    <button id="toggle-kb" onclick="toggleKeyboard()" style="margin-top: 10px; background: #eee; color: #333;">⌨️ Toggle Hindi Keyboard</button>
+    
+    <div id="hindi-keyboard" style="display: none; margin-top: 15px; padding: 15px; background: #f4f4f4; border-radius: 8px; border: 1px solid #ddd;">
+        <div style="margin-bottom: 10px;"><strong>Vowels:</strong><br>
+            <button class="kb-key" onclick="typeChar('अ')">अ</button>
+            <button class="kb-key" onclick="typeChar('आ')">आ</button>
+            <button class="kb-key" onclick="typeChar('इ')">इ</button>
+            <button class="kb-key" onclick="typeChar('ई')">ई</button>
+            <button class="kb-key" onclick="typeChar('उ')">उ</button>
+            <button class="kb-key" onclick="typeChar('ऊ')">ऊ</button>
+            <button class="kb-key" onclick="typeChar('ऋ')">ऋ</button>
+            <button class="kb-key" onclick="typeChar('ए')">ए</button>
+            <button class="kb-key" onclick="typeChar('ऐ')">ऐ</button>
+            <button class="kb-key" onclick="typeChar('ओ')">ओ</button>
+            <button class="kb-key" onclick="typeChar('औ')">औ</button>
+        </div>
+        <div style="margin-bottom: 10px;"><strong>Consonants:</strong><br>
+            <button class="kb-key" onclick="typeChar('क')">क</button>
+            <button class="kb-key" onclick="typeChar('ख')">ख</button>
+            <button class="kb-key" onclick="typeChar('ग')">ग</button>
+            <button class="kb-key" onclick="typeChar('घ')">घ</button>
+            <button class="kb-key" onclick="typeChar('ङ')">ङ</button>
+            <button class="kb-key" onclick="typeChar('च')">च</button>
+            <button class="kb-key" onclick="typeChar('छ')">छ</button>
+            <button class="kb-key" onclick="typeChar('ज')">ज</button>
+            <button class="kb-key" onclick="typeChar('झ')">झ</button>
+            <button class="kb-key" onclick="typeChar('ञ')">ञ</button>
+            <br>
+            <button class="kb-key" onclick="typeChar('ट')">ट</button>
+            <button class="kb-key" onclick="typeChar('ठ')">ठ</button>
+            <button class="kb-key" onclick="typeChar('ड')">ड</button>
+            <button class="kb-key" onclick="typeChar('ढ')">ढ</button>
+            <button class="kb-key" onclick="typeChar('ण')">ण</button>
+            <button class="kb-key" onclick="typeChar('त')">त</button>
+            <button class="kb-key" onclick="typeChar('थ')">थ</button>
+            <button class="kb-key" onclick="typeChar('द')">द</button>
+            <button class="kb-key" onclick="typeChar('ध')">ध</button>
+            <button class="kb-key" onclick="typeChar('न')">न</button>
+            <br>
+            <button class="kb-key" onclick="typeChar('प')">प</button>
+            <button class="kb-key" onclick="typeChar('फ')">फ</button>
+            <button class="kb-key" onclick="typeChar('ब')">ब</button>
+            <button class="kb-key" onclick="typeChar('भ')">भ</button>
+            <button class="kb-key" onclick="typeChar('म')">म</button>
+            <button class="kb-key" onclick="typeChar('य')">य</button>
+            <button class="kb-key" onclick="typeChar('र')">र</button>
+            <button class="kb-key" onclick="typeChar('ल')">ल</button>
+            <button class="kb-key" onclick="typeChar('व')">व</button>
+            <button class="kb-key" onclick="typeChar('श')">श</button>
+            <button class="kb-key" onclick="typeChar('ष')">ष</button>
+            <button class="kb-key" onclick="typeChar('स')">स</button>
+            <button class="kb-key" onclick="typeChar('ह')">ह</button>
+        </div>
+        <div><strong>Matras & Modifiers:</strong><br>
+            <button class="kb-key" onclick="typeChar('ा')">ा</button>
+            <button class="kb-key" onclick="typeChar('ि')">ि</button>
+            <button class="kb-key" onclick="typeChar('ी')">ी</button>
+            <button class="kb-key" onclick="typeChar('ु')">ु</button>
+            <button class="kb-key" onclick="typeChar('ू')">ू</button>
+            <button class="kb-key" onclick="typeChar('ृ')">ृ</button>
+            <button class="kb-key" onclick="typeChar('े')">े</button>
+            <button class="kb-key" onclick="typeChar('ै')">ै</button>
+            <button class="kb-key" onclick="typeChar('ो')">ो</button>
+            <button class="kb-key" onclick="typeChar('ौ')">ौ</button>
+            <button class="kb-key" onclick="typeChar('ं')">ं (Anusvara)</button>
+            <button class="kb-key" onclick="typeChar('्')">् (Halant)</button>
+            <button class="kb-key" onclick="typeChar(' ')">Space</button>
+            <button class="kb-key" onclick="backspace()" style="background: #ffcccc;">⌫ Backspace</button>
+        </div>
+    </div>
+
+    <div id="status"></div>
+    <div id="results"></div>
+
+    <script>
+        function toggleDistance() {
+            const type = document.getElementById('search-type').value;
+            document.getElementById('distance').style.display = type === 'proximity' ? 'block' : 'none';
+            if (type === 'proximity') {
+                document.getElementById('query').placeholder = "Enter exactly two words to find distance between...";
+            } else {
+                document.getElementById('query').placeholder = "Enter phrase to search...";
+            }
+        }
+        
+        function togglePositions(id) {
+            const trunc = document.getElementById('trunc-' + id);
+            const full = document.getElementById('full-' + id);
+            if (full.style.display === 'none') {
+                trunc.style.display = 'none';
+                full.style.display = 'block';
+            } else {
+                trunc.style.display = 'inline';
+                full.style.display = 'none';
+            }
+        }
+        
+        async function performSearch() {
+            const query = document.getElementById('query').value;
+            
+            const type = document.getElementById('search-type').value;
+            const distance = document.getElementById('distance').value;
+            
+            if (!query) return;
+            document.getElementById('hindi-keyboard').style.display = 'none';
+            
+            document.getElementById('status').innerText = 'Searching database...';
+            document.getElementById('results').innerHTML = '';
+            
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, type, distance })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('status').innerHTML = `<span style="color: red;">Error: ${data.error}</span>`;
+                    return;
+                }
+                
+                document.getElementById('status').innerText = `Found ${data.count} matching documents in ${data.time_ms} ms!`;
+                
+                if (data.count === 0) return;
+                
+                const resultsHtml = data.results.slice(0, 100).map((res, index) => {
+                    const docId = res.doc_id || res;
+                    const positions = res.positions || [];
+                    const posStr = JSON.stringify(positions);
+                    
+                    let positionsHtml = '';
+                    if (positions.length > 0) {
+                        if (positions.length <= 5) {
+                            positionsHtml = `<div class="positions-truncated">Match Positions: ${posStr}</div>`;
+                        } else {
+                            const truncStr = JSON.stringify(positions.slice(0, 5)).replace(']', ', ...]');
+                            positionsHtml = `
+                                <div class="positions-truncated" id="trunc-${index}">
+                                    Match Positions: ${truncStr}
+                                    <button class="expand-btn" onclick="togglePositions(${index})">Show All (${positions.length})</button>
+                                </div>
+                                <div class="positions-full" id="full-${index}" style="display: none;">
+                                    Match Positions: ${posStr}
+                                    <button class="expand-btn" onclick="togglePositions(${index})">Show Less</button>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    return `<div class="result-item">
+                        <div>Document ID: <strong>${docId}</strong></div>
+                        ${positionsHtml}
+                    </div>`;
+                }).join('');
+                
+                document.getElementById('results').innerHTML = resultsHtml + 
+                    (data.count > 100 ? `<div style="margin-top: 15px; color: #666;"><em>...and ${data.count - 100} more not shown to prevent browser lag.</em></div>` : '');
+                
+            } catch (err) {
+                document.getElementById('status').innerHTML = `<span style="color: red;">Error: ${err.message}</span>`;
+            }
+        }
+    
+        function toggleKeyboard() {
+            const kb = document.getElementById('hindi-keyboard');
+            kb.style.display = kb.style.display === 'none' ? 'block' : 'none';
+        }
+        function typeChar(char) {
+            const input = document.getElementById('query');
+            input.value += char;
+            input.focus();
+        }
+        function backspace() {
+            const input = document.getElementById('query');
+            input.value = input.value.slice(0, -1);
+            input.focus();
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+================================================================================
+         POSITIONAL INDEX SYSTEM OUTPUT
+================================================================================
+
+Dataset:         Hindi Wikipedia (10,000 Articles)
+Vocabulary Size: 500,305 Unique Terms
+Storage Design:  Vocabulary in Main Memory (RAM), Postings in Secondary Memory (postings.bin)
+
+================================================================================
+PART 1: 5 TEST CASES USED TO TEST THE SYSTEM
+================================================================================
+
+--------------------------------------------------------------------------------
+Test Case 1: "भारत सरकार"
+Search Type:                 Phrase Search
+Total Matching Documents:    331
+Execution Latency:           3.7759 ms (3775.9 microseconds)
+Matching Documents Breakdown:
+  1. Doc ID: 7603
+     Matched Token Starting Positions: [237]
+  2. Doc ID: 3357
+     Matched Token Starting Positions: [174]
+  3. Doc ID: 3366
+     Matched Token Starting Positions: [3140]
+  4. Doc ID: 882
+     Matched Token Starting Positions: [2938, 2999]
+  5. Doc ID: 8544
+     Matched Token Starting Positions: [117]
+     ... and 326 more documents.
+
+--------------------------------------------------------------------------------
+Test Case 2: "प्रथम विश्व"
+Search Type:                 Phrase Search
+Total Matching Documents:    48
+Execution Latency:           1.2751 ms (1275.1 microseconds)
+Matching Documents Breakdown:
+  1. Doc ID: 7039
+     Matched Token Starting Positions: [51]
+  2. Doc ID: 6394
+     Matched Token Starting Positions: [2881]
+  3. Doc ID: 14260
+     Matched Token Starting Positions: [61]
+  4. Doc ID: 15113
+     Matched Token Starting Positions: [150]
+  5. Doc ID: 8049
+     Matched Token Starting Positions: [169]
+     ... and 43 more documents.
+
+--------------------------------------------------------------------------------
+Test Case 3: "मुख्य रूप से"
+Search Type:                 Phrase Search
+Total Matching Documents:    386
+Execution Latency:           6.7921 ms (6792.1 microseconds)
+Matching Documents Breakdown:
+  1. Doc ID: 8567
+     Matched Token Starting Positions: [73]
+  2. Doc ID: 1873
+     Matched Token Starting Positions: [3271]
+  3. Doc ID: 5452
+     Matched Token Starting Positions: [1152, 1484]
+  4. Doc ID: 6235
+     Matched Token Starting Positions: [5393, 5425]
+  5. Doc ID: 7550
+     Matched Token Starting Positions: [1060]
+     ... and 381 more documents.
+
+--------------------------------------------------------------------------------
+Test Case 4: "जन्म हुआ था"
+Search Type:                 Phrase Search
+Total Matching Documents:    44
+Execution Latency:           3.2595 ms (3259.5 microseconds)
+Matching Documents Breakdown:
+  1. Doc ID: 882
+     Matched Token Starting Positions: [529]
+  2. Doc ID: 11716
+     Matched Token Starting Positions: [32]
+  3. Doc ID: 2335
+     Matched Token Starting Positions: [5091]
+  4. Doc ID: 10286
+     Matched Token Starting Positions: [282]
+  5. Doc ID: 4809
+     Matched Token Starting Positions: [285]
+     ... and 39 more documents.
+
+--------------------------------------------------------------------------------
+Test Case 5: "भारत" NEAR/1 "सरकार"
+Search Type:                 Proximity Search (Distance = 1 word apart)
+Total Matching Documents:    32
+Execution Latency:           1.7042 ms
+Matching Documents Breakdown:
+  1. Doc ID: 3100
+     Matched Position Pairs: ['(207, 205)']
+  2. Doc ID: 10884
+     Matched Position Pairs: ['(61, 59)']
+  3. Doc ID: 2243
+     Matched Position Pairs: ['(132, 134)']
+  4. Doc ID: 7963
+     Matched Position Pairs: ['(278, 276)']
+  5. Doc ID: 8130
+     Matched Position Pairs: ['(201, 203)']
+
+
+================================================================================
+PART 2: 10 RARE TERMS WITH THEIR CORRESPONDING POSITIONAL INDEX
+================================================================================
+Description: Rare terms from the Hindi vocabulary (DF=1, CF=1) along with their
+Collection Frequency, Document Frequency, and exact positional index extracted
+directly from secondary memory (postings.bin).
+
+--------------------------------------------------------------------------------
+Rare Term 1: "पञ्चोपचार"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    6588300 bytes in postings.bin
+  Document ID:                 14
+  Positional Index:            DocID 14 -> Positions [97]
+
+--------------------------------------------------------------------------------
+Rare Term 2: "काव्यावतरित"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    3314192 bytes in postings.bin
+  Document ID:                 10
+  Positional Index:            DocID 10 -> Positions [49]
+
+--------------------------------------------------------------------------------
+Rare Term 3: "पदविज्ञान"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    17951376 bytes in postings.bin
+  Document ID:                 56
+  Positional Index:            DocID 56 -> Positions [1214]
+
+--------------------------------------------------------------------------------
+Rare Term 4: "सुपाठ्य"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    18407000 bytes in postings.bin
+  Document ID:                 58
+  Positional Index:            DocID 58 -> Positions [889]
+
+--------------------------------------------------------------------------------
+Rare Term 5: "नेवीब्लू"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    19881548 bytes in postings.bin
+  Document ID:                 59
+  Positional Index:            DocID 59 -> Positions [58]
+
+--------------------------------------------------------------------------------
+Rare Term 6: "सुगमतम"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    24805860 bytes in postings.bin
+  Document ID:                 79
+  Positional Index:            DocID 79 -> Positions [24]
+
+--------------------------------------------------------------------------------
+Rare Term 7: "आत्मपरिचय"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    35290432 bytes in postings.bin
+  Document ID:                 1871
+  Positional Index:            DocID 1871 -> Positions [524]
+
+--------------------------------------------------------------------------------
+Rare Term 8: "सदाएसरहद"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    31979972 bytes in postings.bin
+  Document ID:                 882
+  Positional Index:            DocID 882 -> Positions [1273]
+
+--------------------------------------------------------------------------------
+Rare Term 9: "अबोधावस्था"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    42365124 bytes in postings.bin
+  Document ID:                 15116
+  Positional Index:            DocID 15116 -> Positions [1433]
+
+--------------------------------------------------------------------------------
+Rare Term 10: "फ्लोरिडियन"
+  Document Frequency (DF):     1 (Number of documents containing term)
+  Collection Frequency (CF):   1 (Total occurrences in collection)
+  Secondary Storage Offset:    41209848 bytes in postings.bin
+  Document ID:                 11747
+  Positional Index:            DocID 11747 -> Positions [106]
+
+================================================================================
+END
+================================================================================
