@@ -9,7 +9,7 @@ Official Wikimedia dump containing all encyclopedic Hindi Wikipedia articles wri
 
 ---
 
-## 📁 Repository Structure & Module Descriptions
+## Repository Structure & Module Descriptions
 
 1. **`data_pipeline.py`**:
    - Streams massive Wikipedia XML dumps lazily from `sys.stdin` or a local file using `xml.etree.ElementTree.iterparse`.
@@ -50,7 +50,7 @@ Official Wikimedia dump containing all encyclopedic Hindi Wikipedia articles wri
 
 ---
 
-## ⚙️ How to Run
+## How to Run
 
 ### Prerequisites
 - Python 3.8+
@@ -101,7 +101,7 @@ If reproducing the extraction from a downloaded Wikipedia XML dump file:
 
 ---
 
-## 🔍 How to Test the System
+## How to Test the System
 
 ### Option A: Interactive Command-Line Menu
 Run `query.py` without arguments to launch the interactive terminal interface:
